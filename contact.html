@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — I² Models</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="wordmark">I² MODELS</a>
+    <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="apply.html">Become a Model</a>
+      <div class="nav-item">
+        <a href="models.html">Models</a>
+        <div class="dropdown">
+          <a href="models-female.html">Females</a>
+          <a href="models-male.html">Males</a>
+        </div>
+      </div>
+      <a href="contact.html">Contact</a>
+      <a href="about.html">About</a>
+      <a href="fashioncamp.html">Fashion Camp</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:40px;">
+  <div class="wrap" style="grid-template-columns: 1fr;">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">Get in touch</p>
+      <h1>Talk to the agency</h1>
+      <p>For brands, casting directors, and press inquiries &mdash; models should use the <a href="apply.html">application form</a> instead.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="form-wrap">
+      <!--
+        Same Formspree setup as apply.html: replace YOUR_FORM_ID in the
+        action= below, and replace YOURDOMAIN.com in the "_next" field
+        with your real live domain (a relative path won't redirect correctly).
+      -->
+      <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID">
+        <input type="hidden" name="_next" value="https://YOURDOMAIN.com/apply-thank-you.html" />
+        <input type="hidden" name="_subject" value="New contact message — I² Models" />
+        <p style="display:none;">
+          <label>Don't fill this out if you're human: <input name="_gotcha" /></label>
+        </p>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send message &rarr;</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 I²ModelManagement</span>
+    <span><a href="contact.html">Powered By Devici Studios</a></span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
