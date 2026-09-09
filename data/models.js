@@ -30,6 +30,29 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992392327-3-IMG_0135.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Annecia Morgan",
+    "gender": "female",
+    "height": "5’10.5",
+    "category": "Editorial",
+    "city": "Jamaica",
+    "eyes": "Caramel brown",
+    "hair": "Black",
+    "chest": "82cm/32",
+    "waist": "64cm/25",
+    "hips": "87cm/74",
+    "shoes": "10 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992848293-0-IMG_0125.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992850270-1-IMG_0144.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992851605-2-IMG_0145.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992852871-3-IMG_0149.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992853971-4-IMG_0099.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992855412-5-IMG_0146.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992856683-6-IMG_0147.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
