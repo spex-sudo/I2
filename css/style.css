@@ -617,6 +617,8 @@ footer .wrap {
 }
 
 footer a { text-decoration: none; color: var(--white); }
+footer a.footer-admin { color: rgba(255,255,255,0.4); font-size: 0.78rem; }
+footer a.footer-admin:hover { color: rgba(255,255,255,0.7); }
 
 /* ===========================================================
    Motion system — page transitions, scroll reveals, cursor,
