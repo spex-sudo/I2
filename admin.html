@@ -73,14 +73,7 @@
       <p id="gate-error" class="status err">Incorrect password.</p>
       <button onclick="checkPassword()">Unlock</button>
     </div>
-    <p class="note">
-      Honest disclaimer: this page is hosted the same as the rest of the site, with no server behind it —
-      so this password is a soft deterrent, not real security. Anyone who viewed this page's source code
-      could read it or bypass this screen entirely. The part that's actually secure is the GitHub token on
-      the next screen: nothing can save changes to your repo without one, and it lives only in your
-      browser, never in this file.
-    </p>
-  </div>
+
 
   <!-- ============ MAIN ADMIN PANEL ============ -->
   <div id="panel">
@@ -109,11 +102,8 @@
       </label>
       <button onclick="connectAndLoad()">Connect &amp; load models</button>
       <p id="connect-status" class="status"></p>
-      <p class="note">
-        Create a token at github.com &rarr; Settings &rarr; Developer settings &rarr; Fine-grained tokens.
-        Scope it to only this repository, with "Contents" permission set to Read and write. Nothing else
-        is needed. Treat this token like a password — anyone with it can push changes to your repo.
-      </p>
+
+      
     </div>
 
     <div class="card" id="list-card" style="display:none;">
@@ -165,9 +155,10 @@
       <label for="f-instagram">Instagram / portfolio link (optional)</label>
       <input type="url" id="f-instagram" placeholder="https://instagram.com/username">
 
-      <label for="f-photo">Photo</label>
-      <input type="file" id="f-photo" accept="image/*">
-      <p class="note">Uploads directly into your repo's <code>images/</code> folder when you save. Leave blank when editing to keep the current photo.</p>
+      <label for="f-photo">Photo(s)</label>
+      <input type="file" id="f-photo" accept="image/*" multiple>
+      <p class="note">Select one or several. When adding a new model, these become their photo set. When editing, any newly selected photos are <strong>added</strong> to their existing set — leave this blank to make no change to their photos.</p>
+      <div id="current-photos" style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;"></div>
 
       <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
         <button onclick="saveModel()">Save model</button>
@@ -294,10 +285,12 @@
     }
     emptyNote.style.display = 'none';
     list.innerHTML = currentModels.map(function (m, i) {
+      var thumb = (m.images && m.images[0]) ? m.images[0] : '';
+      var photoCount = m.images ? m.images.length : 0;
       return '<div class="model-item">' +
-        '<img src="' + (m.image || '') + '" alt="">' +
+        '<img src="' + thumb + '" alt="">' +
         '<div class="info"><strong>' + m.name + '</strong>' +
-        '<span>' + m.gender + ' &middot; ' + m.age + ' &middot; ' + m.height + ' &middot; ' + m.category + ' &middot; ' + m.city + '</span></div>' +
+        '<span>' + m.gender + ' &middot; ' + m.age + ' &middot; ' + m.height + ' &middot; ' + m.category + ' &middot; ' + m.city + ' &middot; ' + photoCount + ' photo' + (photoCount === 1 ? '' : 's') + '</span></div>' +
         '<div class="actions">' +
         '<button class="secondary" onclick="editModel(' + i + ')">Edit</button>' +
         '<button class="danger" onclick="deleteModel(' + i + ')">Delete</button>' +
@@ -317,7 +310,26 @@
     document.getElementById('f-instagram').value = m.instagram || '';
     document.getElementById('f-photo').value = '';
     document.getElementById('form-title').textContent = 'Edit model — ' + m.name;
+    renderCurrentPhotos(m.images || []);
     document.getElementById('form-card').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function renderCurrentPhotos(images) {
+    const wrap = document.getElementById('current-photos');
+    if (!images.length) { wrap.innerHTML = ''; return; }
+    wrap.innerHTML = images.map(function (src, i) {
+      return '<div style="position:relative;">' +
+        '<img src="' + src + '" style="width:56px;height:70px;object-fit:cover;border-radius:6px;">' +
+        '<button type="button" onclick="removeCurrentPhoto(' + i + ')" ' +
+        'style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;padding:0;font-size:12px;line-height:1;margin:0;background:var(--danger);border-color:var(--danger);">&times;</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function removeCurrentPhoto(i) {
+    if (editingIndex === null) return;
+    currentModels[editingIndex].images.splice(i, 1);
+    renderCurrentPhotos(currentModels[editingIndex].images);
   }
 
   function deleteModel(i) {
@@ -333,6 +345,7 @@
       document.getElementById(id).value = '';
     });
     document.getElementById('f-photo').value = '';
+    document.getElementById('current-photos').innerHTML = '';
     document.getElementById('form-title').textContent = 'Add a model';
     document.getElementById('form-status').className = 'status';
   }
@@ -346,25 +359,31 @@
     });
   }
 
-  async function uploadPhotoIfNeeded() {
+  async function uploadPhotosIfNeeded() {
     const fileInput = document.getElementById('f-photo');
-    if (!fileInput.files || !fileInput.files[0]) return null;
-    const file = fileInput.files[0];
-    const base64 = await fileToBase64(file);
-    const safeName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
-    const path = 'images/' + safeName;
+    const files = fileInput.files;
+    if (!files || !files.length) return [];
     const cfg = ghConfig();
+    const urls = [];
 
-    const res = await ghRequest(path, {
-      method: 'PUT',
-      body: JSON.stringify({
-        message: 'Upload model photo via admin panel',
-        content: base64,
-        branch: cfg.branch
-      })
-    });
-    if (!res.ok) throw new Error('Photo upload failed (' + res.status + ')');
-    return 'https://raw.githubusercontent.com/' + cfg.owner + '/' + cfg.repo + '/' + cfg.branch + '/' + path;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const base64 = await fileToBase64(file);
+      const safeName = Date.now() + '-' + i + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
+      const path = 'images/' + safeName;
+
+      const res = await ghRequest(path, {
+        method: 'PUT',
+        body: JSON.stringify({
+          message: 'Upload model photo via admin panel',
+          content: base64,
+          branch: cfg.branch
+        })
+      });
+      if (!res.ok) throw new Error('Photo upload failed for ' + file.name + ' (' + res.status + ')');
+      urls.push('https://raw.githubusercontent.com/' + cfg.owner + '/' + cfg.repo + '/' + cfg.branch + '/' + path);
+    }
+    return urls;
   }
 
   async function saveModel() {
@@ -373,9 +392,11 @@
 
     showStatus('form-status', 'Saving…', false);
     try {
-      let imageUrl = editingIndex !== null ? currentModels[editingIndex].image : '';
-      const uploaded = await uploadPhotoIfNeeded();
-      if (uploaded) imageUrl = uploaded;
+      // Start from whatever photos already exist (minus any the admin removed
+      // via the × buttons), then append any newly selected uploads.
+      let images = editingIndex !== null ? (currentModels[editingIndex].images || []).slice() : [];
+      const uploaded = await uploadPhotosIfNeeded();
+      images = images.concat(uploaded);
 
       const model = {
         name: name,
@@ -384,7 +405,7 @@
         height: document.getElementById('f-height').value.trim(),
         category: document.getElementById('f-category').value,
         city: document.getElementById('f-city').value.trim(),
-        image: imageUrl,
+        images: images,
         instagram: document.getElementById('f-instagram').value.trim()
       };
 
@@ -464,9 +485,22 @@ function renderModels(gender) {
     return;
   }
 
-  container.innerHTML = list.map(function (m) {
+  container.innerHTML = list.map(function (m, modelIndex) {
+    var photos = (m.images && m.images.length) ? m.images : [];
+
+    var imagesHtml = photos.map(function (src, i) {
+      return '<img class="stack-img' + (i === 0 ? ' active' : '') + '" src="' + src + '" alt="' + m.name + '" data-model="' + modelIndex + '" data-photo="' + i + '">';
+    }).join('');
+
+    var dotsHtml = '';
+    if (photos.length > 1) {
+      dotsHtml = '<div class="model-photo-dots">' + photos.map(function (_, i) {
+        return '<button' + (i === 0 ? ' class="active"' : '') + ' data-model="' + modelIndex + '" data-photo="' + i + '" aria-label="Photo ' + (i + 1) + '"></button>';
+      }).join('') + '</div>';
+    }
+
     var html = '<div class="roster-card">';
-    html += '<figure><img src="' + m.image + '" alt="' + m.name + '"></figure>';
+    html += '<figure>' + imagesHtml + dotsHtml + '</figure>';
     html += '<h3>' + m.name + '</h3>';
     html += '<p class="tag">' + m.age + ' &middot; ' + m.height + '</p>';
     html += '<p class="tag">' + m.category + ' &middot; ' + m.city + '</p>';
@@ -476,6 +510,20 @@ function renderModels(gender) {
     html += '</div>';
     return html;
   }).join('');
+
+  container.addEventListener('click', function (e) {
+    var dot = e.target.closest('.model-photo-dots button');
+    if (!dot) return;
+    var photoIdx = dot.getAttribute('data-photo');
+    var figure = dot.closest('figure');
+
+    figure.querySelectorAll('.stack-img').forEach(function (img) {
+      img.classList.toggle('active', img.getAttribute('data-photo') === photoIdx);
+    });
+    figure.querySelectorAll('.model-photo-dots button').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-photo') === photoIdx);
+    });
+  });
 }</textarea>
 
 </body>
