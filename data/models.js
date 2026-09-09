@@ -223,6 +223,26 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995964096-6-IMG_0190.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Nichalos Brown",
+    "gender": "male",
+    "height": "6’2",
+    "category": "Editorial",
+    "city": "Jamaican",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "34",
+    "waist": "32",
+    "hips": "36",
+    "shoes": "US 13",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788996218433-0-IMG_0199.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788996220680-1-IMG_0201.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788996222099-2-IMG_0200.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788996226040-3-IMG_0202.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
