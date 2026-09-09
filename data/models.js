@@ -138,6 +138,28 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994889257-7-IMG_0167.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Winston wright",
+    "gender": "male",
+    "height": "6",
+    "category": "Editorial",
+    "city": "Jamaican",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "40",
+    "waist": "34",
+    "hips": "42",
+    "shoes": "10 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995100903-0-IMG_0179.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995103196-1-IMG_0174.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995107171-2-IMG_0178.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995109127-3-IMG_0176.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995111985-4-IMG_0177.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995113535-5-IMG_0175.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
