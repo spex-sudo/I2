@@ -53,6 +53,26 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992856683-6-IMG_0147.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Oshin Haye",
+    "gender": "female",
+    "height": "5’11.5",
+    "category": "Editorial",
+    "city": "Jamaica",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "33",
+    "waist": "26",
+    "hips": "38",
+    "shoes": "10 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993221157-0-IMG_0154.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993223908-1-IMG_0153.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993226552-2-IMG_0152.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993229983-3-IMG_0151.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
