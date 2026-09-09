@@ -554,6 +554,56 @@ section + section { border-top: 1px solid var(--line); }
 
 .model-photo-dots button.active { background: rgba(255,255,255,0.95); }
 
+/* ---------- Model stat details dropdown ---------- */
+
+.details-toggle {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 20px;
+  margin-top: 4px;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--line);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray);
+  cursor: pointer;
+}
+
+.details-toggle::after { content: ''; }
+
+.details-toggle.open { color: var(--black); }
+
+.details-panel {
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+
+.details-panel.open {
+  max-height: 240px;
+  padding: 4px 20px 14px;
+}
+
+.stat-pair {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin: 4px 14px 4px 0;
+}
+
+.stat-pair strong {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 800;
+  color: var(--black);
+  margin-right: 4px;
+}
+
 .roster-card figure img { width: 100%; height: 100%; object-fit: cover; }
 
 .roster-card h3 { padding: 0 20px; margin-top: 0; }
