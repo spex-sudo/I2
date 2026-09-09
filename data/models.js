@@ -73,6 +73,26 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993229983-3-IMG_0151.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Dominique richards",
+    "gender": "female",
+    "height": "5’7.5",
+    "category": "Editorial",
+    "city": "Jamaica",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "26",
+    "waist": "30.5",
+    "hips": "47",
+    "shoes": "9 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993503193-0-IMG_0157.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993507267-1-IMG_0156.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993511286-2-IMG_0118.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993514524-3-IMG_0155.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
