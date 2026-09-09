@@ -46,23 +46,20 @@
     <div class="form-wrap">
 
       <!--
-        FORMSPREE SETUP (for Cloudflare Pages, which has no built-in form handler):
-        1. Go to formspree.io, sign up free, and create a new form.
-        2. Formspree gives you an endpoint like https://formspree.io/f/abcdwxyz
-        3. Replace YOUR_FORM_ID below (in the form's action=) with that ID.
-        4. Replace YOURDOMAIN.com below (in the hidden "_next" field) with
-           your real live domain — Formspree needs the full URL to redirect
-           back to your site correctly, a relative path won't work.
-        5. Free tier handles 50 submissions/month — plenty to start.
+        No backend, no third-party form service: submitting this form opens
+        the applicant's own email app with everything pre-filled (subject +
+        all their answers), addressed to the inbox below.
+
+        Replace YOUR EMAIL two lines down with your real inbox address.
+
+        IMPORTANT LIMITATION: a plain website cannot attach files to an
+        email automatically — browsers block that for security reasons.
+        This form works around it by listing the filenames the applicant
+        picked directly in the email body, as a visible reminder for them
+        to attach those files themselves before hitting send.
       -->
 
-      <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID">
-        <input type="hidden" name="_next" value="https://YOURDOMAIN.com/apply-thank-you.html" />
-        <input type="hidden" name="_subject" value="New model application" />
-        <p style="display:none;">
-          <label>Don't fill this out if you're human: <input name="_gotcha" /></label>
-        </p>
-
+      <form id="model-application-form">
         <div class="field-row">
           <div class="field">
             <label for="fullname">Full name</label>
@@ -109,9 +106,14 @@
         </div>
 
         <div class="field">
-          <label for="portfolio">Portfolio or Instagram link</label>
-          <input type="url" id="portfolio" name="portfolio" placeholder="https://instagram.com/yourname" required>
-          <p class="form-note">Formspree's free plan doesn't accept file uploads, so photos come to us via this link instead. No Instagram or portfolio site? List another way to see your photos below (Google Drive link, WhatsApp number, etc.) — or email 2–4 recent, unedited photos directly to hello@i2models.com after submitting.</p>
+          <label for="portfolio">Portfolio or Instagram link (optional)</label>
+          <input type="url" id="portfolio" name="portfolio" placeholder="https://instagram.com/yourname">
+        </div>
+
+        <div class="field">
+          <label for="photos">Select 2–4 recent photos</label>
+          <input type="file" id="photos" name="photos" accept="image/*" multiple>
+          <p class="form-note">Unedited, natural light preferred — one face-forward, one full-length. These will be listed by name in the email that opens so you remember to attach them; the site can't attach them for you automatically.</p>
         </div>
 
         <div class="field">
@@ -120,7 +122,47 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit application &rarr;</button>
+
+        <p id="application-note" class="form-note" style="display:none; margin-top:18px;">
+          Your email app should now be opening with your application filled in — attach your photos there and hit send to finish.
+        </p>
       </form>
+
+      <script>
+        document.getElementById('model-application-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var f = e.target;
+          var photoFiles = f.photos.files;
+          var photoNames = [];
+          for (var i = 0; i < photoFiles.length; i++) photoNames.push(photoFiles[i].name);
+
+          var subject = 'New Model Application — ' + f.fullname.value;
+          var bodyLines = [
+            'Full name: ' + f.fullname.value,
+            'Date of birth: ' + f.dob.value,
+            'Email: ' + f.email.value,
+            'Phone: ' + f.phone.value,
+            'City / location: ' + f.city.value,
+            'Height: ' + f.height.value,
+            'Category: ' + f.category.value,
+            'Portfolio / Instagram: ' + (f.portfolio.value || '(none provided)'),
+            '',
+            'Message:',
+            f.message.value || '(none)',
+            '',
+            '--- PHOTOS TO ATTACH BEFORE SENDING ---',
+            photoNames.length ? photoNames.join(', ') : '(no photos were selected — please attach 2-4 before sending)'
+          ];
+          var body = bodyLines.join('\n');
+
+          var mailtoLink = 'mailto:YOUR EMAIL'
+            + '?subject=' + encodeURIComponent(subject)
+            + '&body=' + encodeURIComponent(body);
+
+          window.location.href = mailtoLink;
+          document.getElementById('application-note').style.display = 'block';
+        });
+      </script>
     </div>
   </div>
 </section>
