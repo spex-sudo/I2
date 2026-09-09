@@ -160,6 +160,26 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995113535-5-IMG_0175.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Daniel marsh",
+    "gender": "male",
+    "height": "6’q",
+    "category": "Editorial",
+    "city": "Jamaican",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "32",
+    "waist": "31",
+    "hips": "43",
+    "shoes": "44 EU, 9 UK",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995347474-0-IMG_0180.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995352343-1-IMG_0124.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995356122-2-IMG_0182.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995360008-3-IMG_0124.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
