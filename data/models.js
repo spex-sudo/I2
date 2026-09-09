@@ -180,6 +180,26 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995360008-3-IMG_0124.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Lejeane Reid",
+    "gender": "male",
+    "height": "6’2",
+    "category": "Editorial",
+    "city": "Jamaican",
+    "eyes": "brown",
+    "hair": "Black",
+    "chest": "32",
+    "waist": "30.5",
+    "hips": "38",
+    "shoes": "9/10 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995638988-0-IMG_0186.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995641398-1-IMG_0185.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995643852-2-IMG_0188.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995645391-3-IMG_0120.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
