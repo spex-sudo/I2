@@ -200,6 +200,29 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995645391-3-IMG_0120.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Romario Roper",
+    "gender": "male",
+    "height": "6",
+    "category": "Editorial",
+    "city": "Jamaican",
+    "eyes": "Dark Brown",
+    "hair": "Black",
+    "chest": "37",
+    "waist": "31",
+    "hips": "40",
+    "shoes": "9.5 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995955619-0-IMG_0195.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995957709-1-IMG_0193.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995959060-2-IMG_0117.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995960377-3-IMG_0194.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995961607-4-IMG_0191.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995962834-5-IMG_0096.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788995964096-6-IMG_0190.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
