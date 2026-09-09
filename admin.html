@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — I² Models</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root {
+    --black: #000; --white: #fff; --gray: #666; --line: #ddd; --danger: #b3261e; --ok: #1a7a3c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f2; color: var(--black); padding: 24px;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 14px; }
+  .sub { color: var(--gray); font-size: 0.9rem; margin-bottom: 28px; }
+  .card {
+    background: var(--white); border: 1px solid var(--line); border-radius: 12px;
+    padding: 22px; margin-bottom: 20px;
+  }
+  label { display: block; font-size: 0.82rem; color: var(--gray); margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+  input, select, textarea {
+    width: 100%; padding: 11px 12px; font-size: 0.95rem; border: 1px solid var(--line);
+    border-radius: 8px; font-family: inherit; background: #fff;
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+  button {
+    font-family: inherit; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.02em;
+    padding: 12px 20px; border-radius: 8px; border: 1px solid var(--black);
+    background: var(--black); color: var(--white); cursor: pointer; margin-top: 16px;
+  }
+  button.secondary { background: var(--white); color: var(--black); }
+  button.danger { background: var(--white); color: var(--danger); border-color: var(--danger); margin-top: 0; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .note { font-size: 0.82rem; color: var(--gray); margin-top: 10px; line-height: 1.5; }
+  .warn { background: #fff8e6; border: 1px solid #f0d98c; border-radius: 8px; padding: 12px 14px; font-size: 0.85rem; margin-bottom: 20px; }
+  .status { font-size: 0.85rem; margin-top: 12px; padding: 10px 12px; border-radius: 8px; display: none; }
+  .status.show { display: block; }
+  .status.ok { background: #eaf6ee; color: var(--ok); }
+  .status.err { background: #fbeceb; color: var(--danger); }
+  .model-item {
+    display: flex; gap: 14px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line);
+  }
+  .model-item:first-child { border-top: none; }
+  .model-item img { width: 52px; height: 65px; object-fit: cover; border-radius: 6px; background: #eee; flex-shrink: 0; }
+  .model-item .info { flex: 1; min-width: 0; }
+  .model-item .info strong { display: block; font-size: 0.95rem; }
+  .model-item .info span { font-size: 0.8rem; color: var(--gray); }
+  .model-item .actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .model-item .actions button { margin-top: 0; padding: 8px 12px; font-size: 0.78rem; }
+  #panel, #gate-error { display: none; }
+  #gate-error.show { display: block; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ PASSWORD GATE ============ -->
+  <div id="gate">
+    <h1>I² Models — Admin</h1>
+    <p class="sub">Enter the admin password to continue.</p>
+    <div class="card">
+      <label for="gate-password">Password</label>
+      <input type="password" id="gate-password" autocomplete="off">
+      <p id="gate-error" class="status err">Incorrect password.</p>
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <p class="note">
+      Honest disclaimer: this page is hosted the same as the rest of the site, with no server behind it —
+      so this password is a soft deterrent, not real security. Anyone who viewed this page's source code
+      could read it or bypass this screen entirely. The part that's actually secure is the GitHub token on
+      the next screen: nothing can save changes to your repo without one, and it lives only in your
+      browser, never in this file.
+    </p>
+  </div>
+
+  <!-- ============ MAIN ADMIN PANEL ============ -->
+  <div id="panel">
+    <h1>I² Models — Admin</h1>
+    <p class="sub">Add, edit, or remove models. Changes save directly to your GitHub repo.</p>
+
+    <div class="card" id="connect-card">
+      <h2>1. Connect to GitHub</h2>
+      <div class="row">
+        <div>
+          <label for="gh-owner">GitHub username</label>
+          <input type="text" id="gh-owner" value="spex-sudo">
+        </div>
+        <div>
+          <label for="gh-repo">Repository name</label>
+          <input type="text" id="gh-repo" value="INFINITY-MODELS">
+        </div>
+      </div>
+      <label for="gh-branch">Branch</label>
+      <input type="text" id="gh-branch" value="main">
+      <label for="gh-token">GitHub personal access token</label>
+      <input type="password" id="gh-token" autocomplete="off" placeholder="ghp_...">
+      <label style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+        <input type="checkbox" id="remember-token" style="width:auto;">
+        <span style="font-size:0.85rem;color:var(--gray);">Remember token on this device</span>
+      </label>
+      <button onclick="connectAndLoad()">Connect &amp; load models</button>
+      <p id="connect-status" class="status"></p>
+      <p class="note">
+        Create a token at github.com &rarr; Settings &rarr; Developer settings &rarr; Fine-grained tokens.
+        Scope it to only this repository, with "Contents" permission set to Read and write. Nothing else
+        is needed. Treat this token like a password — anyone with it can push changes to your repo.
+      </p>
+    </div>
+
+    <div class="card" id="list-card" style="display:none;">
+      <h2>2. Current roster</h2>
+      <div id="model-list"></div>
+      <p class="note" id="empty-note" style="display:none;">No models yet — add your first one below.</p>
+    </div>
+
+    <div class="card" id="form-card" style="display:none;">
+      <h2 id="form-title">3. Add a model</h2>
+      <div class="row">
+        <div>
+          <label for="f-name">Name</label>
+          <input type="text" id="f-name">
+        </div>
+        <div>
+          <label for="f-gender">Gender</label>
+          <select id="f-gender">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="f-age">Age</label>
+          <input type="number" id="f-age" min="1">
+        </div>
+        <div>
+          <label for="f-height">Height</label>
+          <input type="text" id="f-height" placeholder="5'9&quot;">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="f-category">Category</label>
+          <select id="f-category">
+            <option>Editorial</option>
+            <option>Commercial</option>
+            <option>Runway</option>
+            <option>Fitness</option>
+          </select>
+        </div>
+        <div>
+          <label for="f-city">City</label>
+          <input type="text" id="f-city">
+        </div>
+      </div>
+      <label for="f-instagram">Instagram / portfolio link (optional)</label>
+      <input type="url" id="f-instagram" placeholder="https://instagram.com/username">
+
+      <label for="f-photo">Photo</label>
+      <input type="file" id="f-photo" accept="image/*">
+      <p class="note">Uploads directly into your repo's <code>images/</code> folder when you save. Leave blank when editing to keep the current photo.</p>
+
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button onclick="saveModel()">Save model</button>
+        <button class="secondary" type="button" onclick="resetForm()">Cancel edit</button>
+      </div>
+      <p id="form-status" class="status"></p>
+    </div>
+
+    <div class="warn" id="unsynced-warning" style="display:none;">
+      You have unsaved changes to the roster list that haven't been committed yet — click "Save model" to commit, or your edits will be lost if you close this page.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ============================================================
+  // ADMIN PASSWORD — change this to whatever you like.
+  // Remember: this only hides the page from casual visitors, it
+  // is not real security. See the note on the lock screen.
+  // ============================================================
+  const ADMIN_PASSWORD = "i2models2026";
+
+  const DATA_PATH = "data/models.js";
+  let currentSha = null;
+  let currentModels = [];
+  let editingIndex = null; // null = adding new, number = editing that index
+
+  function checkPassword() {
+    const input = document.getElementById('gate-password').value;
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('panel').style.display = 'block';
+      var savedToken = localStorage.getItem('i2models_gh_token');
+      if (savedToken) {
+        document.getElementById('gh-token').value = savedToken;
+        document.getElementById('remember-token').checked = true;
+      }
+    } else {
+      document.getElementById('gate-error').classList.add('show');
+    }
+  }
+  document.getElementById('gate-password').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') checkPassword();
+  });
+
+  function ghConfig() {
+    return {
+      owner: document.getElementById('gh-owner').value.trim(),
+      repo: document.getElementById('gh-repo').value.trim(),
+      branch: document.getElementById('gh-branch').value.trim() || 'main',
+      token: document.getElementById('gh-token').value.trim()
+    };
+  }
+
+  function showStatus(elId, message, isError) {
+    var el = document.getElementById(elId);
+    el.textContent = message;
+    el.className = 'status show ' + (isError ? 'err' : 'ok');
+  }
+
+  async function ghRequest(path, options) {
+    const cfg = ghConfig();
+    const url = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + path;
+    const res = await fetch(url, Object.assign({
+      headers: {
+        'Authorization': 'Bearer ' + cfg.token,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    }, options));
+    return res;
+  }
+
+  async function connectAndLoad() {
+    const cfg = ghConfig();
+    if (!cfg.token) { showStatus('connect-status', 'Please enter a GitHub token first.', true); return; }
+
+    if (document.getElementById('remember-token').checked) {
+      localStorage.setItem('i2models_gh_token', cfg.token);
+    } else {
+      localStorage.removeItem('i2models_gh_token');
+    }
+
+    showStatus('connect-status', 'Connecting…', false);
+    try {
+      const res = await ghRequest(DATA_PATH + '?ref=' + cfg.branch, { method: 'GET' });
+      if (res.status === 401) { showStatus('connect-status', 'That token was rejected — check it\'s correct and has Contents read/write access.', true); return; }
+      if (res.status === 404) { showStatus('connect-status', 'Could not find data/models.js in that repo/branch — check the username, repo name, and branch above.', true); return; }
+      if (!res.ok) { showStatus('connect-status', 'GitHub error (' + res.status + '). Please try again.', true); return; }
+
+      const data = await res.json();
+      currentSha = data.sha;
+      const decoded = decodeURIComponent(escape(atob(data.content)));
+      currentModels = parseModelsFromSource(decoded);
+
+      showStatus('connect-status', 'Connected — loaded ' + currentModels.length + ' model(s).', false);
+      document.getElementById('list-card').style.display = 'block';
+      document.getElementById('form-card').style.display = 'block';
+      renderModelList();
+    } catch (err) {
+      showStatus('connect-status', 'Connection failed: ' + err.message + ' (if this mentions CORS, GitHub may be blocking browser requests — let me know and we will find a workaround).', true);
+    }
+  }
+
+  function parseModelsFromSource(source) {
+    const match = source.match(/window\.MODELS\s*=\s*(\[[\s\S]*?\n\]);/);
+    if (!match) return [];
+    try {
+      return new Function('return ' + match[1])();
+    } catch (e) {
+      console.error('Could not parse models array', e);
+      return [];
+    }
+  }
+
+  function renderModelList() {
+    const list = document.getElementById('model-list');
+    const emptyNote = document.getElementById('empty-note');
+    if (currentModels.length === 0) {
+      list.innerHTML = '';
+      emptyNote.style.display = 'block';
+      return;
+    }
+    emptyNote.style.display = 'none';
+    list.innerHTML = currentModels.map(function (m, i) {
+      return '<div class="model-item">' +
+        '<img src="' + (m.image || '') + '" alt="">' +
+        '<div class="info"><strong>' + m.name + '</strong>' +
+        '<span>' + m.gender + ' &middot; ' + m.age + ' &middot; ' + m.height + ' &middot; ' + m.category + ' &middot; ' + m.city + '</span></div>' +
+        '<div class="actions">' +
+        '<button class="secondary" onclick="editModel(' + i + ')">Edit</button>' +
+        '<button class="danger" onclick="deleteModel(' + i + ')">Delete</button>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  function editModel(i) {
+    editingIndex = i;
+    const m = currentModels[i];
+    document.getElementById('f-name').value = m.name || '';
+    document.getElementById('f-gender').value = m.gender || 'female';
+    document.getElementById('f-age').value = m.age || '';
+    document.getElementById('f-height').value = m.height || '';
+    document.getElementById('f-category').value = m.category || 'Editorial';
+    document.getElementById('f-city').value = m.city || '';
+    document.getElementById('f-instagram').value = m.instagram || '';
+    document.getElementById('f-photo').value = '';
+    document.getElementById('form-title').textContent = 'Edit model — ' + m.name;
+    document.getElementById('form-card').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function deleteModel(i) {
+    if (!confirm('Remove ' + currentModels[i].name + ' from the roster? This saves immediately.')) return;
+    currentModels.splice(i, 1);
+    renderModelList();
+    commitModels('Remove model via admin panel');
+  }
+
+  function resetForm() {
+    editingIndex = null;
+    ['f-name','f-age','f-height','f-city','f-instagram'].forEach(function (id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('f-photo').value = '';
+    document.getElementById('form-title').textContent = 'Add a model';
+    document.getElementById('form-status').className = 'status';
+  }
+
+  function fileToBase64(file) {
+    return new Promise(function (resolve, reject) {
+      const reader = new FileReader();
+      reader.onload = function () { resolve(reader.result.split(',')[1]); };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function uploadPhotoIfNeeded() {
+    const fileInput = document.getElementById('f-photo');
+    if (!fileInput.files || !fileInput.files[0]) return null;
+    const file = fileInput.files[0];
+    const base64 = await fileToBase64(file);
+    const safeName = Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
+    const path = 'images/' + safeName;
+    const cfg = ghConfig();
+
+    const res = await ghRequest(path, {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: 'Upload model photo via admin panel',
+        content: base64,
+        branch: cfg.branch
+      })
+    });
+    if (!res.ok) throw new Error('Photo upload failed (' + res.status + ')');
+    return 'https://raw.githubusercontent.com/' + cfg.owner + '/' + cfg.repo + '/' + cfg.branch + '/' + path;
+  }
+
+  async function saveModel() {
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) { showStatus('form-status', 'Name is required.', true); return; }
+
+    showStatus('form-status', 'Saving…', false);
+    try {
+      let imageUrl = editingIndex !== null ? currentModels[editingIndex].image : '';
+      const uploaded = await uploadPhotoIfNeeded();
+      if (uploaded) imageUrl = uploaded;
+
+      const model = {
+        name: name,
+        gender: document.getElementById('f-gender').value,
+        age: Number(document.getElementById('f-age').value) || 0,
+        height: document.getElementById('f-height').value.trim(),
+        category: document.getElementById('f-category').value,
+        city: document.getElementById('f-city').value.trim(),
+        image: imageUrl,
+        instagram: document.getElementById('f-instagram').value.trim()
+      };
+
+      if (editingIndex !== null) {
+        currentModels[editingIndex] = model;
+      } else {
+        currentModels.push(model);
+      }
+
+      renderModelList();
+      await commitModels(editingIndex !== null ? 'Update model via admin panel' : 'Add model via admin panel');
+      resetForm();
+      showStatus('form-status', 'Saved and committed to GitHub.', false);
+    } catch (err) {
+      showStatus('form-status', 'Save failed: ' + err.message, true);
+    }
+  }
+
+  function buildFileContents() {
+    const header = document.getElementById('__header_cache').value;
+    const arrayText = 'window.MODELS = ' + JSON.stringify(currentModels, null, 2) + ';\n';
+    const footer = document.getElementById('__footer_cache').value;
+    return header + '\n' + arrayText + '\n' + footer;
+  }
+
+  async function commitModels(message) {
+    const cfg = ghConfig();
+    const content = buildFileContents();
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+
+    const res = await ghRequest(DATA_PATH, {
+      method: 'PUT',
+      body: JSON.stringify({
+        message: message,
+        content: encoded,
+        sha: currentSha,
+        branch: cfg.branch
+      })
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(function () { return {}; });
+      throw new Error('GitHub rejected the save (' + res.status + '): ' + (body.message || 'unknown error'));
+    }
+    const data = await res.json();
+    currentSha = data.content.sha;
+  }
+</script>
+
+<!-- Cached header/footer text preserved from data/models.js so saving from
+     here doesn't wipe out the comments and instructions in that file. -->
+<textarea id="__header_cache" style="display:none;">// ============================================================
+// MODEL ROSTER
+// ------------------------------------------------------------
+// This one file controls the Models, Female Models, and Male
+// Models pages. You can edit it by hand, or use admin.html to
+// manage it through a form instead.
+// ============================================================</textarea>
+<textarea id="__footer_cache" style="display:none;">// ============================================================
+// RENDERING — you shouldn't need to edit anything below this
+// line. This runs automatically on each Models page and builds
+// the cards from the list above.
+// ============================================================
+
+function renderModels(gender) {
+  var container = document.getElementById('model-grid');
+  if (!container) return;
+
+  var list = (gender === 'all')
+    ? window.MODELS
+    : window.MODELS.filter(function (m) { return m.gender === gender; });
+
+  if (!list || list.length === 0) {
+    container.innerHTML =
+      '<p style="grid-column:1/-1;color:var(--gray);background:var(--white);padding:48px 24px;text-align:center;">' +
+      'No models added yet — open data/models.js and follow the instructions at the top to add your first one.' +
+      '</p>';
+    return;
+  }
+
+  container.innerHTML = list.map(function (m) {
+    var html = '<div class="roster-card">';
+    html += '<figure><img src="' + m.image + '" alt="' + m.name + '"></figure>';
+    html += '<h3>' + m.name + '</h3>';
+    html += '<p class="tag">' + m.age + ' &middot; ' + m.height + '</p>';
+    html += '<p class="tag">' + m.category + ' &middot; ' + m.city + '</p>';
+    if (m.instagram) {
+      html += '<p class="tag"><a href="' + m.instagram + '" target="_blank" rel="noopener">Instagram &rarr;</a></p>';
+    }
+    html += '</div>';
+    return html;
+  }).join('');
+}</textarea>
+
+</body>
+</html>
