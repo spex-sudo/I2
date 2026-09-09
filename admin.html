@@ -73,7 +73,14 @@
       <p id="gate-error" class="status err">Incorrect password.</p>
       <button onclick="checkPassword()">Unlock</button>
     </div>
-
+    <p class="note">
+      Honest disclaimer: this page is hosted the same as the rest of the site, with no server behind it —
+      so this password is a soft deterrent, not real security. Anyone who viewed this page's source code
+      could read it or bypass this screen entirely. The part that's actually secure is the GitHub token on
+      the next screen: nothing can save changes to your repo without one, and it lives only in your
+      browser, never in this file.
+    </p>
+  </div>
 
   <!-- ============ MAIN ADMIN PANEL ============ -->
   <div id="panel">
@@ -102,8 +109,8 @@
       </label>
       <button onclick="connectAndLoad()">Connect &amp; load models</button>
       <p id="connect-status" class="status"></p>
-
       
+      </p>
     </div>
 
     <div class="card" id="list-card" style="display:none;">
