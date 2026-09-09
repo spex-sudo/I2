@@ -9,56 +9,28 @@
 // This one file controls the Models, Female Models, and Male
 // Models pages. Add a model here and they automatically show
 // up on the right page(s) — no HTML editing needed.
-//
-// HOW TO ADD A MODEL BY HAND (optional — skip this if using admin.html):
-// 1. Upload their photo(s) to your GitHub repo's /images folder.
-// 2. Copy one of the { ... } blocks below (including the comma
-//    after it) and paste it into the list.
-// 3. Fill in their details. Keep the quote marks.
-// 4. Commit — they'll appear automatically.
-//
-// HOW TO REMOVE A MODEL:
-// Delete their whole { ... } block (and its trailing comma).
-//
-// FIELD NOTES:
-// - gender must be exactly "male" or "female" (lowercase) —
-//   this decides which page they appear on. They always also
-//   appear on the combined Models page.
-// - category should be one of: Editorial, Commercial, Runway,
-//   Fitness — or any short word you prefer.
-// - images is a LIST of photo URLs, not a single one — a model
-//   can have just one, or several. If there's more than one,
-//   small dots appear on their card and visitors can swipe or
-//   click through the set.
-// - eyes, hair, chest, waist, hips, shoes show up in a "Details"
-//   dropdown on the card, below the photo. Leave any of them as
-//   "" (empty) if you don't want to show that stat.
-// - instagram is optional. Leave it as "" (empty) if unused.
 // ============================================================
-
 window.MODELS = [
-
-  // EXAMPLE — copy this block to add a real model, or delete
-  // it once you've added your first one.
-  // {
-  //   name: "Model Name",
-  //   gender: "female",
-  //   height: "5'9\"",
-  //   category: "Editorial",
-  //   city: "Kingston",
-  //   eyes: "Brown",
-  //   hair: "Black",
-  //   chest: "34\"",
-  //   waist: "26\"",
-  //   hips: "36\"",
-  //   shoes: "8 US",
-  //   images: [
-  //     "https://raw.githubusercontent.com/spex-sudo/I2/main/images/example-1.jpg",
-  //     "https://raw.githubusercontent.com/spex-sudo/I2/main/images/example-2.jpg"
-  //   ],
-  //   instagram: "https://instagram.com/username"
-  // },
-
+  {
+    "name": "Christal Johnson",
+    "gender": "female",
+    "height": "5’8",
+    "category": "Editorial",
+    "city": "Jamaica",
+    "eyes": "Black",
+    "hair": "Black",
+    "chest": "30",
+    "waist": "26",
+    "hips": "30",
+    "shoes": "7.5 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992386038-0-IMG_0119.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992388750-1-IMG_0101.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992390179-2-IMG_0134.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788992392327-3-IMG_0135.jpeg"
+    ],
+    "instagram": ""
+  }
 ];
 
 // ============================================================
@@ -114,12 +86,12 @@ function renderModels(gender) {
     var html = '<div class="roster-card">';
     html += '<figure data-model="' + modelIndex + '" data-photo-count="' + photos.length + '">' + imagesHtml + dotsHtml + '</figure>';
     html += '<h3>' + m.name + '</h3>';
-    html += '<p class="tag">' + m.category + ' &middot; ' + m.city + '</p>';
+    html += '<p class="tag">' + m.category + ' · ' + m.city + '</p>';
     if (m.instagram) {
-      html += '<p class="tag"><a href="' + m.instagram + '" target="_blank" rel="noopener">Instagram &rarr;</a></p>';
+      html += '<p class="tag"><a href="' + m.instagram + '" target="_blank" rel="noopener">Instagram →</a></p>';
     }
     if (statsHtml) {
-      html += '<button type="button" class="details-toggle">Details &#9662;</button>';
+      html += '<button type="button" class="details-toggle">Details ▾</button>';
       html += '<div class="details-panel">' + statsHtml + '</div>';
     }
     html += '</div>';
@@ -138,8 +110,6 @@ function renderModels(gender) {
     }
   }
 
-  // Dot clicks and the Details toggle — one delegated listener handles
-  // every card on the page, however many there are.
   container.addEventListener('click', function (e) {
     var dot = e.target.closest('.model-photo-dots button');
     if (dot) {
@@ -154,8 +124,6 @@ function renderModels(gender) {
     }
   });
 
-  // Swipe support — lets visitors swipe left/right on a card's photo to
-  // move through that model's set, in addition to tapping the dots.
   container.querySelectorAll('figure[data-photo-count]').forEach(function (figure) {
     var count = Number(figure.getAttribute('data-photo-count'));
     if (count < 2) return;
@@ -169,7 +137,7 @@ function renderModels(gender) {
       if (startX === null) return;
       var deltaX = e.changedTouches[0].clientX - startX;
       startX = null;
-      if (Math.abs(deltaX) < 35) return; // too small to count as a swipe
+      if (Math.abs(deltaX) < 35) return;
 
       var current = Number(figure.querySelector('.stack-img.active').getAttribute('data-photo'));
       var next = deltaX < 0 ? current + 1 : current - 1;
