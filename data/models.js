@@ -93,6 +93,27 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788993514524-3-IMG_0155.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Tiffany Brooks",
+    "gender": "female",
+    "height": "5’10.5",
+    "category": "Editorial",
+    "city": "Jamaica",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "33",
+    "waist": "26",
+    "hips": "38",
+    "shoes": "91/2 UK, 10 US",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994125322-0-IMG_0163.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994136346-1-IMG_0160.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994150166-2-IMG_0162.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994162312-3-IMG_0159.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994184989-4-IMG_0161.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
