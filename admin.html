@@ -73,13 +73,7 @@
       <p id="gate-error" class="status err">Incorrect password.</p>
       <button onclick="checkPassword()">Unlock</button>
     </div>
-    <p class="note">
-      Honest disclaimer: this page is hosted the same as the rest of the site, with no server behind it —
-      so this password is a soft deterrent, not real security. Anyone who viewed this page's source code
-      could read it or bypass this screen entirely. The part that's actually secure is the GitHub token on
-      the next screen: nothing can save changes to your repo without one, and it lives only in your
-      browser, never in this file.
-    </p>
+    
   </div>
 
   <!-- ============ MAIN ADMIN PANEL ============ -->
@@ -109,7 +103,7 @@
       </label>
       <button onclick="connectAndLoad()">Connect &amp; load models</button>
       <p id="connect-status" class="status"></p>
-      
+  
       </p>
     </div>
 
@@ -136,12 +130,12 @@
       </div>
       <div class="row">
         <div>
-          <label for="f-age">Age</label>
-          <input type="number" id="f-age" min="1">
-        </div>
-        <div>
           <label for="f-height">Height</label>
           <input type="text" id="f-height" placeholder="5'9&quot;">
+        </div>
+        <div>
+          <label for="f-shoes">Shoes</label>
+          <input type="text" id="f-shoes" placeholder="8 US">
         </div>
       </div>
       <div class="row">
@@ -159,6 +153,29 @@
           <input type="text" id="f-city">
         </div>
       </div>
+      <div class="row">
+        <div>
+          <label for="f-eyes">Eyes</label>
+          <input type="text" id="f-eyes" placeholder="Brown">
+        </div>
+        <div>
+          <label for="f-hair">Hair</label>
+          <input type="text" id="f-hair" placeholder="Black">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="f-chest">Chest</label>
+          <input type="text" id="f-chest" placeholder="34&quot;">
+        </div>
+        <div>
+          <label for="f-waist">Waist</label>
+          <input type="text" id="f-waist" placeholder="26&quot;">
+        </div>
+      </div>
+      <label for="f-hips">Hips</label>
+      <input type="text" id="f-hips" placeholder="36&quot;">
+      <p class="note">Eyes, hair, chest, waist, hips, and shoes show up in a "Details" dropdown on each card. Leave any blank to hide that stat.</p>
       <label for="f-instagram">Instagram / portfolio link (optional)</label>
       <input type="url" id="f-instagram" placeholder="https://instagram.com/username">
 
@@ -189,6 +206,20 @@
   // ============================================================
   const ADMIN_PASSWORD = "i2models2026";
 
+  // If anything on this page throws an error, show it on-screen instead of
+  // failing silently to a blank page — this page has no server logs to
+  // check, so this is the only way to see what went wrong.
+  window.addEventListener('error', function (e) {
+    var banner = document.getElementById('js-error-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'js-error-banner';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#b3261e;color:#fff;padding:14px 18px;font-family:monospace;font-size:0.85rem;z-index:9999;';
+      document.body.appendChild(banner);
+    }
+    banner.textContent = 'Page error: ' + e.message + ' (line ' + e.lineno + ')';
+  });
+
   const DATA_PATH = "data/models.js";
   let currentSha = null;
   let currentModels = [];
@@ -199,10 +230,16 @@
     if (input === ADMIN_PASSWORD) {
       document.getElementById('gate').style.display = 'none';
       document.getElementById('panel').style.display = 'block';
-      var savedToken = localStorage.getItem('i2models_gh_token');
-      if (savedToken) {
-        document.getElementById('gh-token').value = savedToken;
-        document.getElementById('remember-token').checked = true;
+      try {
+        var savedToken = localStorage.getItem('i2models_gh_token');
+        if (savedToken) {
+          document.getElementById('gh-token').value = savedToken;
+          document.getElementById('remember-token').checked = true;
+        }
+      } catch (e) {
+        // Some browsers (Private Browsing, certain in-app browsers) block
+        // localStorage entirely. That's fine — it only means the "remember
+        // token" convenience feature won't work, nothing else is affected.
       }
     } else {
       document.getElementById('gate-error').classList.add('show');
@@ -244,10 +281,14 @@
     const cfg = ghConfig();
     if (!cfg.token) { showStatus('connect-status', 'Please enter a GitHub token first.', true); return; }
 
-    if (document.getElementById('remember-token').checked) {
-      localStorage.setItem('i2models_gh_token', cfg.token);
-    } else {
-      localStorage.removeItem('i2models_gh_token');
+    try {
+      if (document.getElementById('remember-token').checked) {
+        localStorage.setItem('i2models_gh_token', cfg.token);
+      } else {
+        localStorage.removeItem('i2models_gh_token');
+      }
+    } catch (e) {
+      // Storage blocked — the token just won't be remembered next visit.
     }
 
     showStatus('connect-status', 'Connecting…', false);
@@ -297,7 +338,7 @@
       return '<div class="model-item">' +
         '<img src="' + thumb + '" alt="">' +
         '<div class="info"><strong>' + m.name + '</strong>' +
-        '<span>' + m.gender + ' &middot; ' + m.age + ' &middot; ' + m.height + ' &middot; ' + m.category + ' &middot; ' + m.city + ' &middot; ' + photoCount + ' photo' + (photoCount === 1 ? '' : 's') + '</span></div>' +
+        '<span>' + m.gender + ' &middot; ' + m.height + ' &middot; ' + m.category + ' &middot; ' + m.city + ' &middot; ' + photoCount + ' photo' + (photoCount === 1 ? '' : 's') + '</span></div>' +
         '<div class="actions">' +
         '<button class="secondary" onclick="editModel(' + i + ')">Edit</button>' +
         '<button class="danger" onclick="deleteModel(' + i + ')">Delete</button>' +
@@ -310,10 +351,15 @@
     const m = currentModels[i];
     document.getElementById('f-name').value = m.name || '';
     document.getElementById('f-gender').value = m.gender || 'female';
-    document.getElementById('f-age').value = m.age || '';
     document.getElementById('f-height').value = m.height || '';
     document.getElementById('f-category').value = m.category || 'Editorial';
     document.getElementById('f-city').value = m.city || '';
+    document.getElementById('f-eyes').value = m.eyes || '';
+    document.getElementById('f-hair').value = m.hair || '';
+    document.getElementById('f-chest').value = m.chest || '';
+    document.getElementById('f-waist').value = m.waist || '';
+    document.getElementById('f-hips').value = m.hips || '';
+    document.getElementById('f-shoes').value = m.shoes || '';
     document.getElementById('f-instagram').value = m.instagram || '';
     document.getElementById('f-photo').value = '';
     document.getElementById('form-title').textContent = 'Edit model — ' + m.name;
@@ -348,7 +394,7 @@
 
   function resetForm() {
     editingIndex = null;
-    ['f-name','f-age','f-height','f-city','f-instagram'].forEach(function (id) {
+    ['f-name','f-height','f-city','f-eyes','f-hair','f-chest','f-waist','f-hips','f-shoes','f-instagram'].forEach(function (id) {
       document.getElementById(id).value = '';
     });
     document.getElementById('f-photo').value = '';
@@ -408,10 +454,15 @@
       const model = {
         name: name,
         gender: document.getElementById('f-gender').value,
-        age: Number(document.getElementById('f-age').value) || 0,
         height: document.getElementById('f-height').value.trim(),
         category: document.getElementById('f-category').value,
         city: document.getElementById('f-city').value.trim(),
+        eyes: document.getElementById('f-eyes').value.trim(),
+        hair: document.getElementById('f-hair').value.trim(),
+        chest: document.getElementById('f-chest').value.trim(),
+        waist: document.getElementById('f-waist').value.trim(),
+        hips: document.getElementById('f-hips').value.trim(),
+        shoes: document.getElementById('f-shoes').value.trim(),
         images: images,
         instagram: document.getElementById('f-instagram').value.trim()
       };
@@ -466,9 +517,14 @@
 <textarea id="__header_cache" style="display:none;">// ============================================================
 // MODEL ROSTER
 // ------------------------------------------------------------
+// EASIEST WAY TO USE THIS FILE: don't. Go to admin.html on your
+// site, log in, and use the form there — it edits this file for
+// you automatically, photo uploads included. You never need to
+// open this file at all if the admin panel is working for you.
+//
 // This one file controls the Models, Female Models, and Male
-// Models pages. You can edit it by hand, or use admin.html to
-// manage it through a form instead.
+// Models pages. Add a model here and they automatically show
+// up on the right page(s) — no HTML editing needed.
 // ============================================================</textarea>
 <textarea id="__footer_cache" style="display:none;">// ============================================================
 // RENDERING — you shouldn't need to edit anything below this
@@ -506,30 +562,81 @@ function renderModels(gender) {
       }).join('') + '</div>';
     }
 
+    var statFields = [
+      ['Gender', m.gender ? (m.gender.charAt(0).toUpperCase() + m.gender.slice(1)) : ''],
+      ['Height', m.height],
+      ['Eyes', m.eyes],
+      ['Hair', m.hair],
+      ['Chest', m.chest],
+      ['Waist', m.waist],
+      ['Hips', m.hips],
+      ['Shoes', m.shoes]
+    ];
+    var statsHtml = statFields.filter(function (f) { return f[1]; }).map(function (f) {
+      return '<span class="stat-pair"><strong>' + f[0] + '</strong> ' + f[1] + '</span>';
+    }).join('');
+
     var html = '<div class="roster-card">';
-    html += '<figure>' + imagesHtml + dotsHtml + '</figure>';
+    html += '<figure data-model="' + modelIndex + '" data-photo-count="' + photos.length + '">' + imagesHtml + dotsHtml + '</figure>';
     html += '<h3>' + m.name + '</h3>';
-    html += '<p class="tag">' + m.age + ' &middot; ' + m.height + '</p>';
     html += '<p class="tag">' + m.category + ' &middot; ' + m.city + '</p>';
     if (m.instagram) {
       html += '<p class="tag"><a href="' + m.instagram + '" target="_blank" rel="noopener">Instagram &rarr;</a></p>';
+    }
+    if (statsHtml) {
+      html += '<button type="button" class="details-toggle">Details &#9662;</button>';
+      html += '<div class="details-panel">' + statsHtml + '</div>';
     }
     html += '</div>';
     return html;
   }).join('');
 
+  function showPhoto(figure, photoIdx) {
+    figure.querySelectorAll('.stack-img').forEach(function (img) {
+      img.classList.toggle('active', img.getAttribute('data-photo') === String(photoIdx));
+    });
+    var dotsWrap = figure.querySelector('.model-photo-dots');
+    if (dotsWrap) {
+      dotsWrap.querySelectorAll('button').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-photo') === String(photoIdx));
+      });
+    }
+  }
+
   container.addEventListener('click', function (e) {
     var dot = e.target.closest('.model-photo-dots button');
-    if (!dot) return;
-    var photoIdx = dot.getAttribute('data-photo');
-    var figure = dot.closest('figure');
+    if (dot) {
+      showPhoto(dot.closest('figure'), Number(dot.getAttribute('data-photo')));
+      return;
+    }
+    var toggle = e.target.closest('.details-toggle');
+    if (toggle) {
+      toggle.classList.toggle('open');
+      var panel = toggle.nextElementSibling;
+      if (panel) panel.classList.toggle('open');
+    }
+  });
 
-    figure.querySelectorAll('.stack-img').forEach(function (img) {
-      img.classList.toggle('active', img.getAttribute('data-photo') === photoIdx);
-    });
-    figure.querySelectorAll('.model-photo-dots button').forEach(function (b) {
-      b.classList.toggle('active', b.getAttribute('data-photo') === photoIdx);
-    });
+  container.querySelectorAll('figure[data-photo-count]').forEach(function (figure) {
+    var count = Number(figure.getAttribute('data-photo-count'));
+    if (count < 2) return;
+    var startX = null;
+
+    figure.addEventListener('touchstart', function (e) {
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    figure.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var deltaX = e.changedTouches[0].clientX - startX;
+      startX = null;
+      if (Math.abs(deltaX) < 35) return;
+
+      var current = Number(figure.querySelector('.stack-img.active').getAttribute('data-photo'));
+      var next = deltaX < 0 ? current + 1 : current - 1;
+      next = (next + count) % count;
+      showPhoto(figure, next);
+    }, { passive: true });
   });
 }</textarea>
 
