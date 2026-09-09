@@ -2,50 +2,26 @@
 // MODEL ROSTER
 // ------------------------------------------------------------
 // This one file controls the Models, Female Models, and Male
-// Models pages. Add a model here and they automatically show
-// up on the right page(s) — no HTML editing needed.
-//
-// HOW TO ADD A MODEL:
-// 1. Upload their photo(s) to your GitHub repo's /images folder.
-// 2. Copy one of the { ... } blocks below (including the comma
-//    after it) and paste it into the list.
-// 3. Fill in their details. Keep the quote marks.
-// 4. Commit — they'll appear automatically.
-//
-// HOW TO REMOVE A MODEL:
-// Delete their whole { ... } block (and its trailing comma).
-//
-// FIELD NOTES:
-// - gender must be exactly "male" or "female" (lowercase) —
-//   this decides which page they appear on. They always also
-//   appear on the combined Models page.
-// - category should be one of: Editorial, Commercial, Runway,
-//   Fitness — or any short word you prefer.
-// - images is a LIST of photo URLs, not a single one — a model
-//   can have just one, or several. If there's more than one,
-//   small dots appear on their card so visitors can click
-//   through the set.
-// - instagram is optional. Leave it as "" (empty) if unused.
+// Models pages. You can edit it by hand, or use admin.html to
+// manage it through a form instead.
 // ============================================================
-
 window.MODELS = [
-
-  // EXAMPLE — copy this block to add a real model, or delete
-  // it once you've added your first one.
-  // {
-  //   name: "Model Name",
-  //   gender: "female",
-  //   age: 22,
-  //   height: "5'9\"",
-  //   category: "Editorial",
-  //   city: "Kingston",
-  //   images: [
-  //     "https://raw.githubusercontent.com/spex-sudo/I2/main/images/example-1.jpg",
-  //     "https://raw.githubusercontent.com/spex-sudo/I2/main/images/example-2.jpg"
-  //   ],
-  //   instagram: "https://instagram.com/username"
-  // },
-
+  {
+    "name": "Christina Johnson",
+    "gender": "female",
+    "age": 0,
+    "height": "5’8",
+    "category": "Editorial",
+    "city": "",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788928602348-0-IMG_0101.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788928604142-1-IMG_0119.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788928605473-2-IMG_0119.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788928606704-3-IMG_0135.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788928608032-4-IMG_0134.jpeg"
+    ],
+    "instagram": ""
+  }
 ];
 
 // ============================================================
@@ -87,21 +63,18 @@ function renderModels(gender) {
     var html = '<div class="roster-card">';
     html += '<figure>' + imagesHtml + dotsHtml + '</figure>';
     html += '<h3>' + m.name + '</h3>';
-    html += '<p class="tag">' + m.age + ' &middot; ' + m.height + '</p>';
-    html += '<p class="tag">' + m.category + ' &middot; ' + m.city + '</p>';
+    html += '<p class="tag">' + m.age + ' · ' + m.height + '</p>';
+    html += '<p class="tag">' + m.category + ' · ' + m.city + '</p>';
     if (m.instagram) {
-      html += '<p class="tag"><a href="' + m.instagram + '" target="_blank" rel="noopener">Instagram &rarr;</a></p>';
+      html += '<p class="tag"><a href="' + m.instagram + '" target="_blank" rel="noopener">Instagram →</a></p>';
     }
     html += '</div>';
     return html;
   }).join('');
 
-  // One click listener handles every card's dots (event delegation) —
-  // works no matter how many models are on the page.
   container.addEventListener('click', function (e) {
     var dot = e.target.closest('.model-photo-dots button');
     if (!dot) return;
-    var modelIdx = dot.getAttribute('data-model');
     var photoIdx = dot.getAttribute('data-photo');
     var figure = dot.closest('figure');
 
