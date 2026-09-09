@@ -114,6 +114,30 @@ window.MODELS = [
       "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994184989-4-IMG_0161.jpeg"
     ],
     "instagram": ""
+  },
+  {
+    "name": "Tamichael Watson",
+    "gender": "male",
+    "height": "6",
+    "category": "Editorial",
+    "city": "Afro Indian",
+    "eyes": "Dark brown",
+    "hair": "Black",
+    "chest": "36",
+    "waist": "32",
+    "hips": "38",
+    "shoes": "EU 44, UK 9",
+    "images": [
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994871321-0-IMG_0165.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994873601-1-IMG_0171.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994876254-2-IMG_0170.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994879017-3-IMG_0100.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994880232-4-IMG_0169.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994882601-5-IMG_0164.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994886123-6-IMG_0168.jpeg",
+      "https://raw.githubusercontent.com/spex-sudo/I2/main/images/1788994889257-7-IMG_0167.jpeg"
+    ],
+    "instagram": ""
   }
 ];
 
