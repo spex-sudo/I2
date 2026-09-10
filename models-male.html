@@ -9,61 +9,62 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <header class="site-header">
   <div class="wrap">
     <a href="index.html" class="wordmark">I² MODELS</a>
     <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
     <nav class="main-nav">
-      <a href="index.html">Home</a>
-      <a href="apply.html">Become a Model</a>
+      <a href="index.html" data-site="nav.home">Home</a>
+      <a href="apply.html" data-site="nav.apply">Become a Model</a>
       <div class="nav-item">
-        <a href="models.html">Models</a>
+        <a href="models.html" data-site="nav.models">Models</a>
         <div class="dropdown">
-          <a href="models-female.html">Females</a>
-          <a href="models-male.html">Males</a>
+          <a href="models-female.html" data-site="nav.females">Females</a>
+          <a href="models-male.html" data-site="nav.males">Males</a>
         </div>
       </div>
-      <a href="contact.html">Contact</a>
-      <a href="about.html">About</a>
-      <a href="fashioncamp.html">Fashion Camp</a>
+      <a href="contact.html" data-site="nav.contact">Contact</a>
+      <a href="about.html" data-site="nav.about">About</a>
+      <a href="fashioncamp.html" data-site="nav.camp">Fashion Camp</a>
     </nav>
   </div>
 </header>
-
 <section class="hero" style="padding-bottom:56px;">
   <div class="wrap" style="grid-template-columns: 1fr;">
     <div class="hero-copy">
-      <p class="hero-eyebrow">Models &middot; Males</p>
-      <h1>Male models</h1>
+      <p class="hero-eyebrow" data-site="modelsMale.eyebrow">Models · Males</p>
+      <h1 data-site="modelsMale.title">Male models</h1>
     </div>
   </div>
 </section>
-
-<section>
+<section class="tight roster-tools-section">
   <div class="wrap">
-    <div class="grid-3" id="model-grid"></div>
+    <div class="roster-tools">
+      <input type="search" id="model-search" placeholder="Search by name, city, or category" data-site="models.searchPlaceholder" autocomplete="off">
+      <span id="roster-count" class="roster-count"></span>
+    </div>
+    <div id="az-index" class="az-index" aria-label="A to Z index"></div>
+    <div id="model-grid" class="roster-index"></div>
   </div>
 </section>
-
-<script src="data/models.js"></script>
-<script>renderModels('male');</script>
-
 <section class="tight">
   <div class="wrap">
-    <h2>Want to join them?</h2>
-    <a href="apply.html" class="btn btn-primary">Apply to be represented &rarr;</a>
+    <h2 data-site="models.joinTitle">Want to join them?</h2>
+    <a href="apply.html" class="btn btn-primary" data-site="models.joinCta">Apply to be represented →</a>
   </div>
 </section>
-
 <footer>
   <div class="wrap">
-    <span>&copy; 2026 I²ModelManagement</span>
-    <span><a href="contact.html">Powered By Devici Studios</a></span>
+    <span data-site="footerCopy">&copy; 2026 I²ModelManagement</span>
+    <span><a href="contact.html" data-site="footerCredit">Powered By Devici Studios</a></span>
     <span><a href="admin.html" class="footer-admin">Admin</a></span>
   </div>
 </footer>
-
+<script src="data/site.js"></script>
+<script src="data/models.js"></script>
+<script src="js/site.js"></script>
+<script src="js/models-ui.js"></script>
+<script>renderModels('male');</script>
 <script src="js/main.js"></script>
 </body>
 </html>
