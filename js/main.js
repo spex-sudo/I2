@@ -1,8 +1,16 @@
+(function () {
+  if (!document.querySelector('link[href="css/nav-fix.css"]')) {
+    var navFix = document.createElement('link');
+    navFix.rel = 'stylesheet';
+    navFix.href = 'css/nav-fix.css';
+    document.head.appendChild(navFix);
+  }
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- Page transition (fade-out on internal link clicks) ----------
   document.querySelectorAll('a[href]').forEach(function (link) {
     var href = link.getAttribute('href');
     var isInternal = href && !href.startsWith('http') && !href.startsWith('mailto:') &&
@@ -15,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Mobile nav toggle
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.querySelector('.main-nav');
   if (toggle && nav) {
@@ -24,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Mobile dropdown accordion (tap "Models" to reveal Males/Females on small screens)
   document.querySelectorAll('.nav-item > a').forEach(function (link) {
     link.addEventListener('click', function (e) {
       if (window.innerWidth <= 900) {
@@ -34,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ---------- Scroll progress bar ----------
   var progress = document.createElement('div');
   progress.className = 'scroll-progress';
   document.body.appendChild(progress);
@@ -44,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
     progress.style.transform = 'scaleX(' + Math.min(scrolled, 1) + ')';
   }, { passive: true });
 
-  // ---------- Cursor dot ----------
   if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
     var dot = document.createElement('div');
     dot.className = 'cursor-dot';
@@ -59,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ---------- Scroll reveal ----------
   var revealTargets = document.querySelectorAll(
     '.hero-copy > *, .hero-overlay > *, .section-head, .roster-card, .value-item, .form-wrap'
   );
@@ -79,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
     revealTargets.forEach(function (el) { io.observe(el); });
   }
 
-  // ---------- Marquee (homepage only, right under the hero) ----------
   var slideshowEl = document.querySelector('.hero-slideshow');
   if (slideshowEl) {
     var words = ['Editorial', 'Commercial', 'Runway', 'Fitness', 'Kingston, Jamaica'];
@@ -98,14 +100,13 @@ document.addEventListener('DOMContentLoaded', function () {
     slideshowEl.insertAdjacentElement('afterend', marquee);
   }
 
-  // ---------- Roster carousel (native scroll, touch/drag friendly, JS auto-advances) ----------
   var carousel = document.querySelector('.roster-carousel');
   if (carousel) {
     var rTrack = carousel.querySelector('.roster-track');
     var rPaused = false;
     var rResumeTimer;
     var rLastTime = null;
-    var rSpeed = 46; // pixels per second — medium pace
+    var rSpeed = 46;
 
     function rPause() {
       rPaused = true;
@@ -141,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Hero slideshow
   var slideshow = document.querySelector('.hero-slideshow');
   if (slideshow) {
     var slides = Array.prototype.slice.call(slideshow.querySelectorAll('.slide'));
@@ -150,10 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var nextBtn = slideshow.querySelector('.slide-arrow.next');
     var current = 0;
     var timer;
-
-    // Real width/height of each photo, in the same order as the .slide elements.
-    // Update these two arrays if you add, remove, or reorder slides.
-    // Order matches the .slide elements above: IMG_0093, IMG_0094, IMG_0095, IMG_0096
     var ratios = [1425 / 950, 1920 / 1080, 1425 / 950, 800 / 450];
 
     slides.forEach(function (_, i) {
