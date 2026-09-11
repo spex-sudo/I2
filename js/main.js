@@ -1,10 +1,13 @@
 (function () {
-  if (!document.querySelector('link[href="css/nav-fix.css"]')) {
-    var navFix = document.createElement('link');
-    navFix.rel = 'stylesheet';
-    navFix.href = 'css/nav-fix.css';
-    document.head.appendChild(navFix);
-  }
+  [['css/nav-fix.css'], ['css/policies.css']].forEach(function (pair) {
+    var href = pair[0];
+    if (!document.querySelector('link[href="' + href + '"]')) {
+      var el = document.createElement('link');
+      el.rel = 'stylesheet';
+      el.href = href;
+      document.head.appendChild(el);
+    }
+  });
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -24,6 +27,23 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   document.querySelectorAll('footer .wrap').forEach(function (wrap) {
+    if (!wrap.querySelector('.footer-legal')) {
+      var legal = document.createElement('span');
+      legal.className = 'footer-legal';
+      [
+        ['policies.html#terms', 'Terms'],
+        ['policies.html#privacy', 'Privacy'],
+        ['policies.html#cookies', 'Cookies'],
+        ['policies.html#applications', 'Applications'],
+        ['policies.html#bookings', 'Bookings']
+      ].forEach(function (pair) {
+        var a = document.createElement('a');
+        a.href = pair[0];
+        a.textContent = pair[1];
+        legal.appendChild(a);
+      });
+      wrap.appendChild(legal);
+    }
     if (!wrap.querySelector('a[href="sitemap.html"]')) {
       var item = document.createElement('span');
       var link = document.createElement('a');
