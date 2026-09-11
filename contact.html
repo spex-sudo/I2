@@ -44,14 +44,6 @@
 <section class="tight">
   <div class="wrap">
     <div class="form-wrap">
-      <!--
-        No backend, no third-party form service: submitting this form opens
-        the visitor's own email app with everything pre-filled (subject +
-        their message), addressed to the inbox below.
-
-        Replace YOUR EMAIL two lines down with your real inbox address.
-      -->
-
       <form id="contact-form">
         <div class="field-row">
           <div class="field">
@@ -97,7 +89,7 @@
           ];
           var body = bodyLines.join('\n');
 
-          var mailtoLink = 'mailto: Devici.studios@outlook.com'
+          var mailtoLink = 'mailto:Devici.studios@outlook.com'
             + '?subject=' + encodeURIComponent(subject)
             + '&body=' + encodeURIComponent(body);
 

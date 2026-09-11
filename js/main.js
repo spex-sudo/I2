@@ -23,6 +23,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  document.querySelectorAll('footer .wrap').forEach(function (wrap) {
+    if (!wrap.querySelector('a[href="sitemap.html"]')) {
+      var item = document.createElement('span');
+      var link = document.createElement('a');
+      link.href = 'sitemap.html';
+      link.textContent = 'Sitemap';
+      item.appendChild(link);
+      wrap.appendChild(item);
+    }
+  });
+
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.querySelector('.main-nav');
   if (toggle && nav) {
