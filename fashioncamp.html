@@ -7,8 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/frames.css">
 </head>
-<body>
+<body data-page="camp">
 
 <header class="site-header">
   <div class="wrap">
@@ -31,12 +32,53 @@
   </div>
 </header>
 
-<section class="hero" style="padding-bottom:56px;">
-  <div class="wrap" style="grid-template-columns: 1fr;">
+<section class="hero page-split" style="padding-bottom:56px;">
+  <div class="wrap split-wrap">
     <div class="hero-copy">
       <p class="hero-eyebrow">Fashion Camp</p>
       <h1>Train like the roster.</h1>
       <p>Fashion Camp is a practical training program for new and developing talent. Sessions cover runway, posing, camera work, portfolio direction, and how to carry yourself on set.</p>
+    </div>
+    <div class="frame frame-tall" data-frame>
+      <figure>
+        <span class="frame-mark">I²</span>
+        <span class="frame-index">01</span>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap camp-frames">
+    <div class="frame frame-portrait" data-frame>
+      <figure>
+        <span class="frame-mark">I²</span>
+        <span class="frame-index">02</span>
+      </figure>
+    </div>
+    <div class="frame frame-square" data-frame>
+      <figure>
+        <span class="frame-mark">I²</span>
+        <span class="frame-index">03</span>
+      </figure>
+    </div>
+    <div class="frame frame-wide" data-frame>
+      <figure>
+        <span class="frame-mark">I²</span>
+        <span class="frame-index">04</span>
+      </figure>
+    </div>
+    <div class="frame frame-square" data-frame>
+      <figure>
+        <span class="frame-mark">I²</span>
+        <span class="frame-index">05</span>
+      </figure>
+    </div>
+    <div class="frame frame-wide" data-frame>
+      <figure>
+        <span class="frame-mark">I²</span>
+        <span class="frame-index">06</span>
+      </figure>
     </div>
   </div>
 </section>
@@ -79,6 +121,9 @@
   </div>
 </footer>
 
+<script src="data/site.js"></script>
+<script src="data/models.js"></script>
+<script src="js/page-frames.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
